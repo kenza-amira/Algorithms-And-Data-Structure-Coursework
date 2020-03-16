@@ -38,15 +38,16 @@ class Graph:
                     result.append((int(tmp[0]),int(tmp[1]),int(tmp[2]))) #creates the tuples from the 3 parts of the split
             print(result)
             self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
-            for i in result:
+            for i in result: #using list of tuples to fill self.dists
                 self.dists[i[0]][i[1]] = i[2]
+            print(self.dists)
             for y in range (n):
                 self.perm.append(y)
     
-
     # Complete as described in the spec, to calculate the cost of the
     # current tour (as represented by self.perm).
     def tourValue(self):
+        print(self.perm)
         totalCost = 0
         for x in range (1,int(self.n)):
             totalCost = totalCost + self.dists[self.perm[x]][self.perm[x-1]]
