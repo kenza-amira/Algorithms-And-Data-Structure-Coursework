@@ -40,7 +40,7 @@ class Graph:
             print(result)
             self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
             for i in result: #using list of tuples to fill self.dists
-                self.dists[i[0]][i[1]] = i[2]
+                self.dists[i[0]][i[1]] = self.dists[i[1]][i[0]] = i[2]
             print(self.dists)
             for y in range (int(self.n)):
                 self.perm.append(y)
@@ -54,6 +54,8 @@ class Graph:
             totalCost += self.dists[self.perm[x]][self.perm[x-1]]
         totalCost += self.dists[self.perm[(self.n)-1]][0] #making sure it wrapsaround
         return totalCost
+    
+    
     
     def swapHeuristic(self):
         better = True
@@ -97,3 +99,17 @@ class Graph:
     # if it improves the tour value.
     # Return True/False depending on success.              
     def tryReverse(self,i,j):
+        normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]] #calculating cost of original permutation 
+        normalCost += self.dists[self.perm[j]][self.perm[(j+1)%self.n]]
+        
+        changedCost = self.dists[self.perm[j]][self.perm[(i-1)%self.n]]
+        changedCost += self.dists[self.perm[i]][self.perm[(j+1)%self.n]]
+        
+        if (changedCost < normalCost):
+            temp = self.perm[:]
+            temp.reverse
+            for x in range (i, j):
+                self.perm[x] = temp[x]
+            return True
+        else:
+            return False
