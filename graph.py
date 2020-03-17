@@ -63,17 +63,27 @@ class Graph:
                 if self.trySwap(i):
                     better = True
                     
+
+    def TwoOptHeuristic(self):
+        better = True
+        while better:
+            better = False
+            for j in range(self.n-1):
+                for i in range(j):
+                    if self.tryReverse(i,j):
+                        better = True
     # Attempt the swap of cities i and i+1 in self.perm and commit
     # commit to the swap if it improves the cost of the tour.
     # Return True/False depending on success.
     def trySwap(self,i):
         
-        normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]]
+        normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]] #calculating cost of original permutation 
         normalCost += self.dists[self.perm[(i+2)%self.n]][self.perm[(i+1)%self.n]]
+         #calculating cost of swap only at the swap location to avoid expensive algorithm (by calling tourValue each time)
         changedCost = self.dists[self.perm[i]][self.perm[(i+2)%self.n]]
         changedCost += self.dists[self.perm[(i+1)%self.n]][self.perm[(i-1)%self.n]]
                 
-        if (changedCost < normalCost):
+        if (changedCost < normalCost): #performing swap if cost is less
             a = self.perm[i]
             b = self.perm[(i+1)%self.n]
             self.perm[i] = b
@@ -81,3 +91,9 @@ class Graph:
             return True
         else:
             return False
+
+    # Consider the effect of reversiing the segment between
+    # self.perm[i] and self.perm[j], and commit to the reversal
+    # if it improves the tour value.
+    # Return True/False depending on success.              
+    def tryReverse(self,i,j):
