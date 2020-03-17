@@ -20,7 +20,7 @@ class Graph:
             with open (filename) as fp: #This creates a list of tuples from the given file
                 result = []
                 for i in fp.readlines():
-                    tmp = i.encode().split() #encode() is used to get set of bytes for the split, splits at the middle space
+                    tmp = i.encode().split() #encode() is used to get set of bytes instead of str for the split, splits at the middle space
                     result.append((int(tmp[0]),int(tmp[1]))) #creates the tuple from the 2 parts of the split
             print(result) #Used for debugging
             self.dists = [[0 for x in range (int(self.n))] for y in range (int(self.n))]
@@ -48,8 +48,8 @@ class Graph:
     # Complete as described in the spec, to calculate the cost of the
     # current tour (as represented by self.perm).
     def tourValue(self):
+        print(self.perm)
         totalCost = 0
-        print(len (self.perm)) #used for debugging
         for x in range (1,int(self.n)):
             totalCost += self.dists[self.perm[x]][self.perm[x-1]]
         totalCost += self.dists[self.perm[(self.n)-1]][0] #making sure it wrapsaround
@@ -66,4 +66,18 @@ class Graph:
     # Attempt the swap of cities i and i+1 in self.perm and commit
     # commit to the swap if it improves the cost of the tour.
     # Return True/False depending on success.
-    #def trySwap(self,i): 
+    def trySwap(self,i):
+        
+        normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]]
+        normalCost += self.dists[self.perm[(i+2)%self.n]][self.perm[(i+1)%self.n]]
+        changedCost = self.dists[self.perm[i]][self.perm[(i+2)%self.n]]
+        changedCost += self.dists[self.perm[(i+1)%self.n]][self.perm[(i-1)%self.n]]
+                
+        if (changedCost < normalCost):
+            a = self.perm[i]
+            b = self.perm[(i+1)%self.n]
+            self.perm[i] = b
+            self.perm[(i+1)%self.n] = a
+            return True
+        else:
+            return False
