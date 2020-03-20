@@ -55,8 +55,7 @@ class Graph:
         totalCost += self.dists[self.perm[(self.n)-1]][0] #making sure it wrapsaround
         return totalCost
     
-    
-    
+    # Below are given functions   
     def swapHeuristic(self):
         better = True
         while better:
@@ -74,6 +73,8 @@ class Graph:
                 for i in range(j):
                     if self.tryReverse(i,j):
                         better = True
+    # End of given functions
+    
     # Attempt the swap of cities i and i+1 in self.perm and commit
     # commit to the swap if it improves the cost of the tour.
     # Return True/False depending on success.
@@ -81,35 +82,54 @@ class Graph:
         
         normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]] #calculating cost of original permutation 
         normalCost += self.dists[self.perm[(i+2)%self.n]][self.perm[(i+1)%self.n]]
-         #calculating cost of swap only at the swap location to avoid expensive algorithm (by calling tourValue each time)
+        #calculating cost of swap only at the swap location to avoid expensive algorithm (by calling tourValue each time)
         changedCost = self.dists[self.perm[i]][self.perm[(i+2)%self.n]]
         changedCost += self.dists[self.perm[(i+1)%self.n]][self.perm[(i-1)%self.n]]
                 
         if (changedCost < normalCost): #performing swap if cost is less
+            #saving current values
             a = self.perm[i]
             b = self.perm[(i+1)%self.n]
+            #performing the swap
             self.perm[i] = b
             self.perm[(i+1)%self.n] = a
             return True
         else:
             return False
 
+
     # Consider the effect of reversiing the segment between
     # self.perm[i] and self.perm[j], and commit to the reversal
     # if it improves the tour value.
     # Return True/False depending on success.              
+    # 
     def tryReverse(self,i,j):
         normalCost = self.dists[self.perm[i]][self.perm[(i-1)%self.n]] #calculating cost of original permutation 
         normalCost += self.dists[self.perm[j]][self.perm[(j+1)%self.n]]
-        
-        changedCost = self.dists[self.perm[j]][self.perm[(i-1)%self.n]]
+        #calculating cost of swap only at the swap location to avoid expensive algorithm (by calling tourValue each time)
+        changedCost = self.dists[self.perm[j]][self.perm[(i-1)%self.n]]  
         changedCost += self.dists[self.perm[i]][self.perm[(j+1)%self.n]]
         
-        if (changedCost < normalCost):
-            temp = self.perm[:]
-            temp.reverse
-            for x in range (i, j):
-                self.perm[x] = temp[x]
-            return True
+        if (changedCost<normalCost):
+            self.perm[i:j+1] = reversed(self.perm[i:j+1]) #reversing only the slice we care about
+            print(self.perm) #For debugging purposes
+            return True;
         else:
-            return False
+            return False;
+        
+    # Implement the Greedy heuristic which builds a tour starting
+    # from node 0, taking the closest (unused) node as 'next'
+    # each time.
+    def Greedy(self):
+        i = 0;
+        next = [0 for x in range (int(self.n))]
+        for i in self.perm:
+            print(i)
+            for j in range(self.n):
+                next[i] = self.dists[i][j]
+            print(next)
+            index = next.index(min(next))
+            a = self.perm[(i+1)%self.n]
+            self.perm[(i+1)%self.n] = index
+            self.perm[index] = a
+ 
