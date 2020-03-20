@@ -110,9 +110,9 @@ class Graph:
         changedCost = self.dists[self.perm[j]][self.perm[(i-1)%self.n]]  
         changedCost += self.dists[self.perm[i]][self.perm[(j+1)%self.n]]
         
-        if (changedCost<normalCost):
+        if (changedCost<normalCost): 
             self.perm[i:j+1] = reversed(self.perm[i:j+1]) #reversing only the slice we care about
-            print(self.perm) #For debugging purposes
+            print(self.perm) #For debugging
             return True;
         else:
             return False;
@@ -121,15 +121,22 @@ class Graph:
     # from node 0, taking the closest (unused) node as 'next'
     # each time.
     def Greedy(self):
-        i = 0;
-        next = [0 for x in range (int(self.n))]
+        visited = []
         for i in self.perm:
-            print(i)
-            for j in range(self.n):
-                next[i] = self.dists[i][j]
-            print(next)
-            index = next.index(min(next))
-            a = self.perm[(i+1)%self.n]
-            self.perm[(i+1)%self.n] = index
-            self.perm[index] = a
+            next = self.dists[i]
+            for x in visited:
+                next[x] = 0 # makes sure that visited nodes are not considered
+            value = min([x for x in next if x!= 0]) #gets the smallest non zero distance (since self.dists[i][i]) is in the array
+            print(value)
+            index = next.index(value) #finds node of first occurence of the value within our array
+            
+            visited.append(index) #adds node to list of visited node
+                #print(index)
+            a = self.perm[(i+1)%self.n] #saving current value at i+1
+            self.perm[(i+1)%self.n] = index #changing it to our index(next node to visit)
+            self.perm[index] = a #swapping original value of i+1 with index
+                
+                
+                
+ 
  
