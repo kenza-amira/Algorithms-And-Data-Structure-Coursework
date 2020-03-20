@@ -123,18 +123,20 @@ class Graph:
     def Greedy(self):
         visited = []
         for i in self.perm:
-            next = self.dists[i]
+            visited.append(i)
+            print("the loop is" , i)
+            next = self.dists[i].copy()
             for x in visited:
-                next[x] = 0 # makes sure that visited nodes are not considered
+                next[x] = 0
+            print("next array is", next)
             value = min([x for x in next if x!= 0]) #gets the smallest non zero distance (since self.dists[i][i]) is in the array
-            print(value)
-            index = next.index(value) #finds node of first occurence of the value within our array
-            
-            visited.append(index) #adds node to list of visited node
-                #print(index)
+            print("smallest value is" , value)
+            index = self.dists[i].index(value) #finds node of first occurence of the value within our array
+
             a = self.perm[(i+1)%self.n] #saving current value at i+1
+            #self.perm[index] = a #swapping original value of i+1 with index
             self.perm[(i+1)%self.n] = index #changing it to our index(next node to visit)
-            self.perm[index] = a #swapping original value of i+1 with index
+                
                 
                 
                 
