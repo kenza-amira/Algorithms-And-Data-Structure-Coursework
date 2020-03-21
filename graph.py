@@ -1,5 +1,6 @@
 import math
 import numpy as np
+
 def euclid(p,q):
     x = p[0]-q[0]
     y = p[1]-q[1]
@@ -136,6 +137,10 @@ class Graph:
             a = self.perm[(i+1)%self.n] #saving current value at i+1
             #self.perm[index] = a #swapping original value of i+1 with index
             self.perm[(i+1)%self.n] = index #changing it to our index(next node to visit)
+            print("calculated index is", index)
+            print("next index is",self.perm[(i+1)%self.n])
+            
+
                 
                 
                 
