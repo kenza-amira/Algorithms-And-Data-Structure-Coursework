@@ -1,5 +1,6 @@
 import math
 
+#provided function
 def euclid(p,q):
     x = p[0]-q[0]
     y = p[1]-q[1]
@@ -29,6 +30,7 @@ class Graph:
                     self.dists[i][j] = self.dists[j][i] = euclid(result[i],result[j])
             for y in range (int(self.n)):
                 self.perm.append(y)
+                
         else: #For case where n is given
             self.perm = []
             self.n = n 
@@ -37,11 +39,11 @@ class Graph:
                 for i in fp.readlines(): #Creates list of tuples (with 3 elements) from the given file
                     tmp = i.encode().split() #same as above
                     result.append((int(tmp[0]),int(tmp[1]),int(tmp[2]))) #creates the tuples from the 3 parts of the split
-            print(result)
+            print(result) #For debugging
             self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
             for i in result: #using list of tuples to fill self.dists
                 self.dists[i[0]][i[1]] = self.dists[i[1]][i[0]] = i[2]
-            print(self.dists)
+            print(self.dists) #For debugging
             for y in range (int(self.n)):
                 self.perm.append(y)
     
@@ -51,7 +53,7 @@ class Graph:
         print(self.perm)
         totalCost = 0
         for x in range (int(self.n)):
-            totalCost += self.dists[self.perm[x]][self.perm[(x+1)%self.n]]
+            totalCost += self.dists[self.perm[x]][self.perm[(x+1)%self.n]] #Modulo to wraparound
         return totalCost
     
     
