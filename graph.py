@@ -23,12 +23,11 @@ class Graph:
                 for i in fp.readlines():
                     tmp = i.encode().split() #encode() is used to get set of bytes instead of str for the split, splits at the middle space
                     result.append((int(tmp[0]),int(tmp[1]))) #creates the tuple from the 2 parts of the split
-            print(result) #Used for debugging
             self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
-            for i in range(int(self.n)):
-                for j in range(int(self.n)): #using the list of tuples to fill self.dists
+            for i in range(self.n):
+                for j in range(self.n): #using the list of tuples to fill self.dists
                     self.dists[i][j] = self.dists[j][i] = euclid(result[i],result[j])
-            for y in range (int(self.n)):
+            for y in range (self.n):
                 self.perm.append(y)
                 
         else: #For case where n is given
@@ -39,20 +38,17 @@ class Graph:
                 for i in fp.readlines(): #Creates list of tuples (with 3 elements) from the given file
                     tmp = i.encode().split() #same as above
                     result.append((int(tmp[0]),int(tmp[1]),int(tmp[2]))) #creates the tuples from the 3 parts of the split
-            print(result) #For debugging
             self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
             for i in result: #using list of tuples to fill self.dists
                 self.dists[i[0]][i[1]] = self.dists[i[1]][i[0]] = i[2]
-            print(self.dists) #For debugging
-            for y in range (int(self.n)):
+            for y in range (self.n):
                 self.perm.append(y)
     
     # Complete as described in the spec, to calculate the cost of the
     # current tour (as represented by self.perm).
     def tourValue(self):
-        print(self.perm)
         totalCost = 0
-        for x in range (int(self.n)):
+        for x in range (self.n):
             totalCost += self.dists[self.perm[x]][self.perm[(x+1)%self.n]] #Modulo to wraparound
         return totalCost
     
@@ -114,7 +110,6 @@ class Graph:
         
         if (changedCost<normalCost): 
             self.perm[i:j+1] = reversed(self.perm[i:j+1]) #reversing only the slice we care about
-            print(self.perm) #For debugging
             return True;
         else:
             return False;
@@ -123,24 +118,21 @@ class Graph:
     # from node 0, taking the closest (unused) node as 'next'
     # each time.
     def Greedy(self):
-        visited = []
-        for i in self.perm:
-            visited.append(i)
-            print("the loop is" , i)
-            next = self.dists[i].copy()
-            for x in visited:
-                next[x] = 0
-            print("next array is", next)
-            value = min([x for x in next if x!= 0]) #gets the smallest non zero distance (since self.dists[i][i]) is in the array
-            print("smallest value is" , value)
-            index = self.dists[i].index(value) #finds node of first occurence of the value within our array
-
-            a = self.perm[(i+1)%self.n] #saving current value at i+1
-            self.perm[index] = a #swapping original value of i+1 with index
-            self.perm[(i+1)%self.n] = index #changing it to our index(next node to visit)
-            print("calculated index is", index)
-            print("next index is",self.perm[(i+1)%self.n])
-            
+        visited = [] #keeps track of visited nodes
+        array = [0] # we start at node 0
+        counter = 1 #helps to stop the for loop
+        for i in array:
+            if (counter < self.n): #stops when we reach 50 nodes
+                counter += 1
+                visited.append(i) #we add the current node to the list of visited nodes
+                next = self.dists[i].copy() #storing a copy of self.dists at i giving us all distances from our i to all other j
+                for x in visited: #setting all visited nodes to 0 so the algorithm never picks them
+                    next[x] = 0
+                value = min([x for x in next if x!= 0]) #gets the smallest non zero distance (since self.dists[i][i]) is in the array
+                index = next.index(value) #finds node of first occurence of the value within our next array
+                array.append(index) #adding next node to explore to our array
+                visited.append(index)
+        self.perm = array #replacing initial permutation with the final array
 
                 
                 
