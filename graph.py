@@ -122,7 +122,7 @@ class Graph:
         array = [0] # we start at node 0
         counter = 1 #helps to stop the for loop
         for i in array:
-            if (counter < self.n): #stops when we reach 50 nodes
+            if (counter < self.n): 
                 counter += 1
                 visited.append(i) #we add the current node to the list of visited nodes
                 next = self.dists[i].copy() #storing a copy of self.dists at i giving us all distances from our i to all other j
@@ -133,6 +133,34 @@ class Graph:
                 array.append(index) #adding next node to explore to our array
                 visited.append(index)
         self.perm = array #replacing initial permutation with the final array
+    
+    #Own algorithm, checks ahead and choses less expensive path given 2 nodes
+    def LookAhead(self):
+        visited = [] #keeps track of visited nodes
+        array = [0] # we start at node 0
+        counter = 1 #helps to stop the for loop
+        lookAhead = [0 for x in range (self.n)]
+        total = [0 for x in range (self.n)]
+        for i in array:
+            if (counter < self.n): 
+                counter += 1
+                visited.append(i) #we add the current node to the list of visited nodes
+                next = self.dists[i].copy() #storing a copy of self.dists at i giving us all distances from our i to all other j
+                for x in visited: #setting all visited nodes to 0 so the algorithm never picks them
+                    next[x] = 0
+                for y in range (len(next)):#storing a copy of self.dists at i giving us all distances from oll our i in next to all other j
+                    lookAhead[y] = self.dists[y].copy()
+                for x in range (len(next)): #calculating all totals (node x to its closest neighbour)
+                    if (next[x] != 0):
+                        value = min([z for z in lookAhead[x] if z!= 0])
+                        total [x] = next[x] + value
+                    else:
+                        total [x] = 0
+                bestValue = min([z for z in total if z!= 0]) #looks for smallest total
+                index = total.index(bestValue) #finds node of first occurence of the value within our next array
+                array.append(index) #adding next node to explore to our array
+                visited.append(index)
+        self.perm = array #replacing initial permutation with the final array        
 
                 
                 
