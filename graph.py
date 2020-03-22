@@ -51,10 +51,10 @@ class Graph:
     def tourValue(self):
         print(self.perm)
         totalCost = 0
-        for x in range (1,int(self.n)):
-            totalCost += self.dists[self.perm[x]][self.perm[x-1]]
-        totalCost += self.dists[self.perm[(self.n)-1]][0] #making sure it wrapsaround
+        for x in range (int(self.n)):
+            totalCost += self.dists[self.perm[x]][self.perm[(x+1)%self.n]]
         return totalCost
+    
     
     # Below are given functions   
     def swapHeuristic(self):
@@ -135,7 +135,7 @@ class Graph:
             index = self.dists[i].index(value) #finds node of first occurence of the value within our array
 
             a = self.perm[(i+1)%self.n] #saving current value at i+1
-            #self.perm[index] = a #swapping original value of i+1 with index
+            self.perm[index] = a #swapping original value of i+1 with index
             self.perm[(i+1)%self.n] = index #changing it to our index(next node to visit)
             print("calculated index is", index)
             print("next index is",self.perm[(i+1)%self.n])
