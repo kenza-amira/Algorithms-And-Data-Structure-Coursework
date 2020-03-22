@@ -1,5 +1,4 @@
 import math
-import numpy as np
 
 def euclid(p,q):
     x = p[0]-q[0]
@@ -24,7 +23,7 @@ class Graph:
                     tmp = i.encode().split() #encode() is used to get set of bytes instead of str for the split, splits at the middle space
                     result.append((int(tmp[0]),int(tmp[1]))) #creates the tuple from the 2 parts of the split
             print(result) #Used for debugging
-            self.dists = [[0 for x in range (int(self.n))] for y in range (int(self.n))]
+            self.dists = [[0 for x in range (self.n)] for y in range (self.n)]
             for i in range(int(self.n)):
                 for j in range(int(self.n)): #using the list of tuples to fill self.dists
                     self.dists[i][j] = self.dists[j][i] = euclid(result[i],result[j])
