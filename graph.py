@@ -157,10 +157,11 @@ class Graph:
                     else:
                         total [x] = 0
                 bestValue = min([z for z in total if z!= 0]) #looks for smallest total
-                index = total.index(bestValue) #finds node of first occurence of the value within our next array
+                index = total.index(bestValue) #finds node of first occurence of the value within our sum array
                 array.append(index) #adding next node to explore to our array
                 visited.append(index)
-        self.perm = array #replacing initial permutation with the final array        
+        self.perm = array #replacing initial permutation with the final array
+        self.TwoOptHeuristic();        
 
                 
                 
